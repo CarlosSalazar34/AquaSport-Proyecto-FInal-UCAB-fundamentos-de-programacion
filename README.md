@@ -2,6 +2,10 @@
 
 Proyecto final de programacion UCAB
 
+# AquaSport-Proyecto-FInal-UCAB-fundamentos-de-programacion
+
+Proyecto final de programacion UCAB
+
 # AquaSport - Script de Inicialización
 
 Este es un ejemplo de cómo inicializar la base de datos y correr el programa.
