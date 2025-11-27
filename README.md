@@ -12,7 +12,7 @@ Este es un ejemplo de cómo inicializar la base de datos y correr el programa.
 
 ### 🏃 Ejecutar la configuración inicial
 
-\`\`\`bash
+```bash
 # Navegar al directorio del proyecto
 cd AquaSport-Proyecto-FInal-UCAB-fundamentos-de-programacion
 
@@ -21,4 +21,4 @@ make build
 
 # Ejecutar el script principal o el ejecutable
 ./AquaSport
-\`\`\`
+```
