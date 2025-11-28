@@ -25,10 +25,48 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
 
     print(f"El total de ventas del trimestre es: {total}")
 
-    columns: list[int] = []
+    temp_columns = content_two[0].split(",")
+    columns = []
+    i = 1
+    while i < len(temp_columns):
+        columns.append(temp_columns[i].strip())
+        i += 1
 
-    for i in content_two[0].split(",")[1::]:
-        columns.append(i)
+    ventas_totales_lista = []
+    i = 0
+    while i < len(columns):
+        ventas_totales_lista.append(0)
+        i += 1
+
+    # Lógica de Acumulación de Ventas
+    for j in range(1, len(content_two)): 
+        
+        temp_data = content_two[j].split(",")
+        data = []
+        
+        v = 1
+        while v < len(temp_data):
+            data.append(temp_data[v].strip().replace('\n', ''))
+            v += 1
+            
+        for v in range(len(data)):
+            cantidad_vendida = int(data[v])
+            cantidad_vendida = 0
+            
+            ventas_totales_lista[v] += cantidad_vendida
+    
+    print("\n--- 📊 Reporte de Unidades Vendidas por Producto ---")
+    
+    for i in range(len(columns)):
+        print(f"📦 El total de ventas del producto **{columns[i]}** es: **{ventas_totales_lista[i]} unidades**")
+    
+    print("\n**Fin del Reporte**")
+
+
+    # columns: list[int] = []
+
+    # for i in content_two[0].split(",")[1::]:
+    #     columns.append(i)
 
     # print(columns)
     # print(len(columns))
@@ -41,14 +79,15 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
 
     # print(content_two)
 
-    for i in range(0, len(columns)):
-        for j in range(1, len(content_two)):
-            # print(content_two[j], end=" ")
-            data = content_two[j].split(",")[1::]
-            print(data)
-        for v in (0, len(data)):
-            if i == v:
-                print(f"El total de ventas del producto {columns[i]} es: {data[v]}")
+    # for i in range(0, len(columns)):
+    #     for j in range(1, len(content_two)):
+    #         # print(content_two[j], end=" ")
+    #         data = content_two[j].split(",")[1::]
+    #         # print(data)
+    #         # print(len(data))
+    #         for v in (0, len(data)):
+    #             if i == v:
+    #                 print(f"El total de ventas del producto {columns[i]} es: {data[v]}")
             # print(data)
             # if i == j:
                 # print(f"El total de ventas del producto {columns[i]} es: {data[j]}")
