@@ -1,5 +1,12 @@
 import os
 
+def get_total(list: list) -> int:
+    total: int = 0
+    for item in list:
+        total += item
+    return total
+
+
 def total_of_sales(content: str) -> int:
     total: int = 0
 
@@ -9,7 +16,34 @@ def total_of_sales(content: str) -> int:
             total += int(price)
     return total
 
+def get_total_of_all_products(content_two: str) -> None:
+    columns: list[int] = []
 
+    for item in content_two[0].split(",")[1::]:
+        columns.append(item.replace("\n", ""))
+
+    codes: list[list[str, list[str]]] = []
+    
+    for code in columns:
+        codes.append([code, []])
+
+    for i in range(0, len(columns)):
+        print(f"indice {i}")
+        for j in range(1, len(content_two)):
+            data = content_two[j].split(",")[1::]
+            for v in range(0, len(data)):
+                if v == i:
+                    for item in codes:
+                        # print(item)
+                        if item[0] == columns[i]:
+                            item[1].append(int(data[v].replace("\n", "")))
+
+    for item in codes:
+        print(get_total(item[1]))
+    # return codes
+
+
+    
 
 def read_file(file_path_price: str, file_path_sales: str) -> str:
     # os.system("cls")
@@ -22,76 +56,16 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
 
 
     total: int = total_of_sales(content=content_two)
+    # total_of_all_products: list[list[int]] = get_total_of_all_products(content_two=content_two)
+
+    # for item in total_of_all_products:
+        # print(get_total(item[1]))
 
     print(f"El total de ventas del trimestre es: {total}")
+    get_total_of_all_products(content_two=content_two)  
+    # print(total_of_all_products)
 
-    temp_columns = content_two[0].split(",")
-    columns = []
-    i = 1
-    while i < len(temp_columns):
-        columns.append(temp_columns[i].strip())
-        i += 1
-
-    ventas_totales_lista = []
-    i = 0
-    while i < len(columns):
-        ventas_totales_lista.append(0)
-        i += 1
-
-    # Lógica de Acumulación de Ventas
-    for j in range(1, len(content_two)): 
-        
-        temp_data = content_two[j].split(",")
-        data = []
-        
-        v = 1
-        while v < len(temp_data):
-            data.append(temp_data[v].strip().replace('\n', ''))
-            v += 1
-            
-        for v in range(len(data)):
-            cantidad_vendida = int(data[v])
-            cantidad_vendida = 0
-            
-            ventas_totales_lista[v] += cantidad_vendida
     
-    print("\n--- 📊 Reporte de Unidades Vendidas por Producto ---")
-    
-    for i in range(len(columns)):
-        print(f"📦 El total de ventas del producto **{columns[i]}** es: **{ventas_totales_lista[i]} unidades**")
-    
-    print("\n**Fin del Reporte**")
-
-
-    # columns: list[int] = []
-
-    # for i in content_two[0].split(",")[1::]:
-    #     columns.append(i)
-
-    # print(columns)
-    # print(len(columns))
-    # print(columns)
-    # print(len(columns))            
-    # for item in content_two[::]:
-    #     data = item.split(",")[1::]
-    #     print(data)
-    #     print(len(data))
-
-    # print(content_two)
-
-    # for i in range(0, len(columns)):
-    #     for j in range(1, len(content_two)):
-    #         # print(content_two[j], end=" ")
-    #         data = content_two[j].split(",")[1::]
-    #         # print(data)
-    #         # print(len(data))
-    #         for v in (0, len(data)):
-    #             if i == v:
-    #                 print(f"El total de ventas del producto {columns[i]} es: {data[v]}")
-            # print(data)
-            # if i == j:
-                # print(f"El total de ventas del producto {columns[i]} es: {data[j]}")
-
     # return content_two[0:2]
 
 def menu():
