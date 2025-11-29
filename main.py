@@ -29,22 +29,12 @@ def histogram(content_one: str, content_two: str) -> str:
         ventas: int = get_total(item[1])
         histogram_values.append([item[0], ventas])
 
-    # for item in histogram_values:
-    #     percentage: float = (item[1] / total) * 100
-    #     stars: int = int(percentage // 2)
-    #     print(f"Codigo {item[0]}: " + "*" * stars + f" ({percentage:.2f}%)")
-
-
-    # print("*" * 50, end="\n")
     content += f'{"*"*50}\n'
-    # print("Representación gráfica de las ventas por producto:")
     content += "Representación gráfica de las ventas por producto:\n"
     for item in histogram_values:
         content += "#"*int((item[1]/total)*100) + f" {get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)\n"
-        # print("#"*int((item[1]/total)*100), f"{get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)")
     content += f'{"*"*50}\n'
     return content
-    # print(("*" * 50), end="\n")
 
 def get_max(sales: list[int]) -> int:
     max_value: int = sales[0]
@@ -82,7 +72,6 @@ def get_product_less_sold(content_two: str, content_one: str) -> str:
                     item[1].append(int(data[v].replace("\n", "")))
                     item.append(prices[v])
 
-    # print("Producto menos vendido en el trimestre fue el: ", end="")
     content += "Producto menos vendido en el trimestre fue el: "
     for item in codes:
         sales.append(get_total(item[1]))
