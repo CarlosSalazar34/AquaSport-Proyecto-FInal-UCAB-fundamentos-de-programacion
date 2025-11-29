@@ -1,5 +1,45 @@
 import os
 
+def histogram(content_one: str, content_two: str) -> None:
+    total = total_of_sales(content_two=content_two, content_one=content_one)[0]
+    histogram_values: list[list[str, int]] = []
+    print("Histograma de ventas por producto:")
+    columns: list[int] = []
+
+    for item in content_two[0].split(",")[1::]:
+        columns.append(item.replace("\n", ""))
+
+    codes: list[list[str, list[str]]] = []
+    
+    for code in columns:
+        codes.append([code, []])
+
+    for i in range(0, len(columns)):
+        for j in range(1, len(content_two)):
+            data = content_two[j].split(",")[1::]
+            for v in range(0, len(data)):
+                if v == i:
+                    for item in codes:
+                        # print(item)
+                        if item[0] == columns[i]:
+                            item[1].append(int(data[v].replace("\n", "")))
+
+    for item in codes:
+        ventas: int = get_total(item[1])
+        histogram_values.append([item[0], ventas])
+
+    # for item in histogram_values:
+    #     percentage: float = (item[1] / total) * 100
+    #     stars: int = int(percentage // 2)
+    #     print(f"Codigo {item[0]}: " + "*" * stars + f" ({percentage:.2f}%)")
+
+    print("*" * 50, end="\n")
+    print("Representación gráfica de las ventas por producto:")
+    for item in histogram_values:
+        print("#"*int((item[1]/total)*100), f"{get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)")
+
+    print(("*" * 50), end="\n")
+
 def get_max(sales: list[int]) -> int:
     max_value: int = sales[0]
     for item in sales:
@@ -314,24 +354,25 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     with open(file_path_sales, "r", encoding="utf-8") as file_sales:
         content_two = file_sales.readlines()
 
-    ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
-    print(f"El total de ventas del trimestre es: {ventas} ventas")
-    print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
-    print("-"*50)
-    print("El total de ventas por producto es el siguiente: ")
-    get_total_of_all_products(content_two=content_two, content_one=content_one)  
-    print("-"*50)
-    get_total_of_the_day(content_two=content_two)
-    print("-"*50)
-    sales_of_the_month(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    """En proceso"""
-    print("-"*50)
-    get_product_most_sold(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    get_product_less_sold(content_two=content_two, content_one=content_one)
+    # ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
+    # print(f"El total de ventas del trimestre es: {ventas} ventas")
+    # print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
+    # print("-"*50)
+    # print("El total de ventas por producto es el siguiente: ")
+    # get_total_of_all_products(content_two=content_two, content_one=content_one)  
+    # print("-"*50)
+    # get_total_of_the_day(content_two=content_two)
+    # print("-"*50)
+    # sales_of_the_month(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # """En proceso"""
+    # print("-"*50)
+    # get_product_most_sold(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # get_product_less_sold(content_two=content_two, content_one=content_one)
+    histogram(content_one=content_one, content_two=content_two)
     
 
 def menu():
