@@ -1,5 +1,26 @@
 import os
 
+def get_price_of_product(content_one: list[str],code: str) -> int:
+    for line  in content_one:
+        data = line.split(",")
+        if data[1] == code:
+            return float(data[-1])
+        
+def get_total_of_the_day(content_two: str) -> None:
+    # print(content_two)
+    for d in content_two[1::]:
+        day = d[1::].split(",")[0]
+        data = d[1::].split(",")[1::]
+        total: int = sum_of_the_day(data)
+        
+        print(f"El total de ventas del dia {day} es {len(data)} y se obtuvo una ganacia de: {total}$")
+
+def sum_of_the_day(sales: list[str]) -> int:
+    total: int = 0
+    for item in sales:
+        total += int(item)
+    return total
+
 def get_total(list: list) -> int:
     total: int = 0
     for item in list:
@@ -7,16 +28,46 @@ def get_total(list: list) -> int:
     return total
 
 
-def total_of_sales(content: str) -> int:
-    total: int = 0
+def total_of_sales(content_two: str, content_one: str) -> list[int]:
+    total_ventas: int = 0
+    total_usd: int = 0
 
-    for line in content[1::]:
+    for line in content_two[1::]:
         data = line[1:-1].split(",")
         for price in data[1::]:
-            total += int(price)
-    return total
+            total_ventas += int(price)
 
-def get_total_of_all_products(content_two: str) -> None:
+
+    columns: list[int] = []
+
+    for item in content_two[0].split(",")[1::]:
+        columns.append(item.replace("\n", ""))
+
+        codes: list[list[str, list[str]]] = []
+        
+        for code in columns:
+            codes.append([code, []])
+
+        for i in range(0, len(columns)):
+            # print(f"indice {i}")
+            # print(content_two)
+            for j in range(1, len(content_two)):
+                data = content_two[j].split(",")[1::]
+                for v in range(0, len(data)):
+                    if v == i:
+                        for item in codes:
+                            # print(item)
+                            if item[0] == columns[i]:
+                                item[1].append(int(data[v].replace("\n", "")))
+
+        for item in codes:
+            price: int = get_price_of_product(content_one=content_one, code=item[0])
+            ventas: int = get_total(item[1])
+            total_usd += ventas * price
+    # return total
+    return [total_ventas, total_usd]
+
+def get_total_of_all_products(content_two: str, content_one: str) -> None:
     columns: list[int] = []
 
     for item in content_two[0].split(",")[1::]:
@@ -28,7 +79,8 @@ def get_total_of_all_products(content_two: str) -> None:
         codes.append([code, []])
 
     for i in range(0, len(columns)):
-        print(f"indice {i}")
+        # print(f"indice {i}")
+        # print(content_two)
         for j in range(1, len(content_two)):
             data = content_two[j].split(",")[1::]
             for v in range(0, len(data)):
@@ -39,7 +91,13 @@ def get_total_of_all_products(content_two: str) -> None:
                             item[1].append(int(data[v].replace("\n", "")))
 
     for item in codes:
-        print(get_total(item[1]))
+        price: int = get_price_of_product(content_one=content_one, code=item[0])
+        ventas: int = get_total(item[1])
+        print("El total de ventas del codigo "+item[0], end=" => ")
+        print(str(ventas)+" ventas")
+        print(f"El total de ingresos del producto es {ventas*price:.2f}$")
+        print("-------------------------------")
+        # print(f"Total de ingresos: {}")
     # return codes
 
 
@@ -55,15 +113,15 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
         content_two = file_sales.readlines()
 
 
-    total: int = total_of_sales(content=content_two)
-    # total_of_all_products: list[list[int]] = get_total_of_all_products(content_two=content_two)
+    ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
+    print(f"El total de ventas del trimestre es: {ventas} ventas")
+    print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
+    print("-------------------------------")
+    print("El total de ventas por producto es el siguiente: ")
+    get_total_of_all_products(content_two=content_two, content_one=content_one)  
 
-    # for item in total_of_all_products:
-        # print(get_total(item[1]))
-
-    print(f"El total de ventas del trimestre es: {total}")
-    get_total_of_all_products(content_two=content_two)  
-    # print(total_of_all_products)
+    """En proceso"""
+    get_total_of_the_day(content_two=content_two)
 
     
     # return content_two[0:2]
@@ -81,7 +139,7 @@ def main():
     while True:
         os.system("cls")            
         menu()
-        choice: str = input("Ingrese su opción: ")
+        choice: str = input("Ingrese su opción: ").lower().strip()
 
         match choice: 
             case "1":
