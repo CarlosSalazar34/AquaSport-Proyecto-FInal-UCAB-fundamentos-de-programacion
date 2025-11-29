@@ -1,5 +1,40 @@
 import os
 
+def sales_of_the_month(content_two: str) -> None:
+    total_sales_first_month: int = 0
+    total_sales_second_month: int = 0
+    total_sales_third_month: int = 0
+
+    total_first_month: int = 0
+    total_second_month: int = 0
+    total_third_month: int = 0
+    
+    for i in range(1, len(content_two)):
+        month: int = int(content_two[i].split(",")[0].split("/")[1])
+        match month:
+            case 10:
+                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
+                total_sales_first_month += len(content_two[i].split(",")[1::])
+                total_first_month += total_day
+            case 11:
+                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
+                total_sales_second_month += len(content_two[i].split(",")[1::])
+                total_second_month += total_day
+            case 12:
+                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
+                total_sales_third_month += len(content_two[i].split(",")[1::])
+                total_third_month += total_day
+
+    print(f"El total de ganacias del mes de Octubre es: {total_first_month} $")
+    print(f"El total de ventas del mes de Octubre es: {total_sales_first_month} ventas")
+    print("-------------------------------")
+    print(f"El total de ganancias del mes de Noviembre es: {total_second_month} $")
+    print(f"El total de ventas del mes de Noviembre es: {total_sales_second_month} ventas")
+    print("-------------------------------")
+    print(f"El total de ganancias del mes de Diciembre es: {total_third_month} $")
+    print(f"El total de ventas del mes de Diciembre es: {total_sales_third_month} ventas")
+
+
 def get_price_of_product(content_one: list[str],code: str) -> int:
     for line  in content_one:
         data = line.split(",")
@@ -103,7 +138,6 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     with open(file_path_sales, "r", encoding="utf-8") as file_sales:
         content_two = file_sales.readlines()
 
-
     ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
     print(f"El total de ventas del trimestre es: {ventas} ventas")
     print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
@@ -113,6 +147,7 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
 
     """En proceso"""
     get_total_of_the_day(content_two=content_two)
+    sales_of_the_month(content_two=content_two)
 
     
 
