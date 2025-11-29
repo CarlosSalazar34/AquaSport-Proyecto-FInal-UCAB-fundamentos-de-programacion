@@ -1,5 +1,7 @@
 import os
 
+
+
 def sales_of_the_month_for_product(content_two: str, content_one: str) -> None:
     columns: list[str] = content_two[0].split(",")[1::]
 
@@ -72,7 +74,21 @@ def sales_of_the_month_for_product(content_two: str, content_one: str) -> None:
         
 
 
-def sales_of_the_month(content_two: str) -> None:
+def sales_of_the_month(content_two: str, content_one: str) -> None:
+
+    prices = []
+    for product in content_one:
+        data = product.split(",")
+        prices.append(float(data[-1]))
+
+    columns: list[str] = content_two[0].split(",")[1::] 
+
+    codes: list[list[str, list[int]]] = []
+
+    for code in columns:
+        codes.append([code, []])
+
+
     total_sales_first_month: int = 0
     total_sales_second_month: int = 0
     total_sales_third_month: int = 0
@@ -80,32 +96,36 @@ def sales_of_the_month(content_two: str) -> None:
     total_first_month: int = 0
     total_second_month: int = 0
     total_third_month: int = 0
-    
-    for i in range(1, len(content_two)):
-        month: int = int(content_two[i].split(",")[0].split("/")[1])
-        match month:
-            case 10:
-                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
-                total_sales_first_month += len(content_two[i].split(",")[1::])
-                total_first_month += total_day
-            case 11:
-                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
-                total_sales_second_month += len(content_two[i].split(",")[1::])
-                total_second_month += total_day
-            case 12:
-                total_day: int = sum_of_the_day(content_two[i].split(",")[1::])
-                total_sales_third_month += len(content_two[i].split(",")[1::])
-                total_third_month += total_day
 
-    print(f"El total de ganacias del mes de Octubre es: {total_first_month} $")
-    print(f"El total de ventas del mes de Octubre es: {total_sales_first_month} ventas")
-    print("-------------------------------")
-    print(f"El total de ganancias del mes de Noviembre es: {total_second_month} $")
-    print(f"El total de ventas del mes de Noviembre es: {total_sales_second_month} ventas")
-    print("-------------------------------")
-    print(f"El total de ganancias del mes de Diciembre es: {total_third_month} $")
-    print(f"El total de ventas del mes de Diciembre es: {total_sales_third_month} ventas")
+    for line in range(1, len(content_two)):
+        if content_two[line].split(",")[0].split("/")[1] == "10":
+            data = content_two[line].split(",")[1::]
+            for v in range(0, len(data)):
+                total_sales_first_month += int(data[v]) * prices[v]
+            total_first_month += get_total(data)
 
+        if content_two[line].split(",")[0].split("/")[1] == "11":
+            data = content_two[line].split(",")[1::]
+            for v in range(0, len(data)):
+                total_sales_second_month += int(data[v]) * prices[v]
+            total_second_month += get_total(data)
+
+        if content_two[line].split(",")[0].split("/")[1] == "12":
+            data = content_two[line].split(",")[1::]
+            for v in range(0, len(data)):
+                total_sales_third_month += int(data[v]) * prices[v]
+            total_third_month += get_total(data)
+
+    print(f"El total de ventas del mes de Octubre es: {total_first_month} ventas")
+    print(f"El total de ingresos del mes de Octubre es: {total_sales_first_month:.2f}$")
+
+    print("-------------------------------")
+    print(f"El total de ventas del mes de Noviembre es: {total_second_month} ventas")
+    print(f"El total de ingresos del mes de Noviembre es: {total_sales_second_month:.2f}$")
+    print("-------------------------------")
+    print(f"El total de ventas del mes de Diciembre es: {total_third_month} ventas")
+    print(f"El total de ingresos del mes de Diciembre es: {total_sales_third_month:.2f}$")
+    print()
 
 def get_price_of_product(content_one: list[str],code: str) -> int:
     for line  in content_one:
@@ -130,7 +150,7 @@ def sum_of_the_day(sales: list[str]) -> int:
 def get_total(list: list) -> int:
     total: int = 0
     for item in list:
-        total += item
+        total += int(item)
     return total
 
 
@@ -208,16 +228,16 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     with open(file_path_sales, "r", encoding="utf-8") as file_sales:
         content_two = file_sales.readlines()
 
-    ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
-    print(f"El total de ventas del trimestre es: {ventas} ventas")
-    print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
-    print("-------------------------------")
-    print("El total de ventas por producto es el siguiente: ")
-    get_total_of_all_products(content_two=content_two, content_one=content_one)  
+    # ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
+    # print(f"El total de ventas del trimestre es: {ventas} ventas")
+    # print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
+    # print("-------------------------------")
+    # print("El total de ventas por producto es el siguiente: ")
+    # get_total_of_all_products(content_two=content_two, content_one=content_one)  
 
     """En proceso"""
-    get_total_of_the_day(content_two=content_two)
-    sales_of_the_month(content_two=content_two)
+    # get_total_of_the_day(content_two=content_two)
+    sales_of_the_month(content_two=content_two, content_one=content_one)
     sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
 
     
