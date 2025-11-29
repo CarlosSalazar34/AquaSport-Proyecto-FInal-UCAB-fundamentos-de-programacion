@@ -125,7 +125,7 @@ def sales_of_the_month(content_two: str, content_one: str) -> None:
     print("-------------------------------")
     print(f"El total de ventas del mes de Diciembre es: {total_third_month} ventas")
     print(f"El total de ingresos del mes de Diciembre es: {total_sales_third_month:.2f}$")
-    print()
+    print("-------------------------------")
 
 def get_price_of_product(content_one: list[str],code: str) -> int:
     for line  in content_one:
