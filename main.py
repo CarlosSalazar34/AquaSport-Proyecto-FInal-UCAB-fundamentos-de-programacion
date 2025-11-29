@@ -1,9 +1,10 @@
 import os
 
-def histogram(content_one: str, content_two: str) -> None:
+def histogram(content_one: str, content_two: str) -> str:
+    content: str = ""
     total = total_of_sales(content_two=content_two, content_one=content_one)[0]
     histogram_values: list[list[str, int]] = []
-    print("Histograma de ventas por producto:")
+    content += "Representación gráfica de las ventas por producto:\n"
     columns: list[int] = []
 
     for item in content_two[0].split(",")[1::]:
@@ -33,12 +34,17 @@ def histogram(content_one: str, content_two: str) -> None:
     #     stars: int = int(percentage // 2)
     #     print(f"Codigo {item[0]}: " + "*" * stars + f" ({percentage:.2f}%)")
 
-    print("*" * 50, end="\n")
-    print("Representación gráfica de las ventas por producto:")
-    for item in histogram_values:
-        print("#"*int((item[1]/total)*100), f"{get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)")
 
-    print(("*" * 50), end="\n")
+    # print("*" * 50, end="\n")
+    content += f'{"*"*50}\n'
+    # print("Representación gráfica de las ventas por producto:")
+    content += "Representación gráfica de las ventas por producto:\n"
+    for item in histogram_values:
+        content += "#"*int((item[1]/total)*100) + f" {get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)\n"
+        # print("#"*int((item[1]/total)*100), f"{get_name_of_product(content_one, item[0])} ({(item[1]/total)*100:.2f}%)")
+    content += f'{"*"*50}\n'
+    return content
+    # print(("*" * 50), end="\n")
 
 def get_max(sales: list[int]) -> int:
     max_value: int = sales[0]
@@ -55,7 +61,8 @@ def get_name_of_product(content_one: str, code: str) -> str:
     return ""
 
 
-def get_product_less_sold(content_two: str, content_one: str) -> None:
+def get_product_less_sold(content_two: str, content_one: str) -> str:
+    content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
     sales = []
     prices = []
@@ -75,7 +82,8 @@ def get_product_less_sold(content_two: str, content_one: str) -> None:
                     item[1].append(int(data[v].replace("\n", "")))
                     item.append(prices[v])
 
-    print("Producto menos vendido en el trimestre fue el: ", end="")
+    # print("Producto menos vendido en el trimestre fue el: ", end="")
+    content += "Producto menos vendido en el trimestre fue el: "
     for item in codes:
         sales.append(get_total(item[1]))
 
@@ -87,13 +95,19 @@ def get_product_less_sold(content_two: str, content_one: str) -> None:
     for item in codes:
         if get_total(item[1]) == min_sales:
             price = item[2]
-            print(get_name_of_product(content_one=content_one, code=item[0]))
-            print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre", end=" => ")
-            print(str(min_sales)+" ventas")
-            print(f"El total de ingresos que dejo este producto fue {min_sales * price:.2f}$")
+            content += get_name_of_product(content_one=content_one, code=item[0]) + "\n"
+            content += f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre" + " => "
+            content += str(min_sales)+" ventas\n"  
+            content += f"El total de ingresos que dejo este producto fue {min_sales * price:.2f}$\n"
+            # print(get_name_of_product(content_one=content_one, code=item[0]))
+            # print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre", end=" => ")
+            # print(str(min_sales)+" ventas")
+            # print(f"El total de ingresos que dejo este producto fue {min_sales * price:.2f}$")
             break
+    return content
 
-def get_product_most_sold(content_two: str, content_one: str) -> None:
+def get_product_most_sold(content_two: str, content_one: str) -> str:
+    content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
     sales = []
     prices = []
@@ -113,7 +127,8 @@ def get_product_most_sold(content_two: str, content_one: str) -> None:
                     item[1].append(int(data[v].replace("\n", "")))
                     item.append(prices[v])
 
-    print("Producto más vendido en el trimestre fue el: ", end="")
+    # print("Producto más vendido en el trimestre fue el: ", end="")
+    content += "Producto más vendido en el trimestre fue el: "
     for item in codes:
         sales.append(get_total(item[1]))
 
@@ -121,11 +136,16 @@ def get_product_most_sold(content_two: str, content_one: str) -> None:
     for item in codes:
         if get_total(item[1]) == max_sales:
             price = item[2]
-            print(get_name_of_product(content_one=content_one, code=item[0]))
-            print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre", end=" => ")
-            print(str(max_sales)+" ventas")
-            print(f"El total de ingresos que dejo este producto fue {max_sales * price:.2f}$")
+            # print(get_name_of_product(content_one=content_one, code=item[0]))
+            # print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre", end=" => ")
+            # print(str(max_sales)+" ventas")
+            # print(f"El total de ingresos que dejo este producto fue {max_sales * price:.2f}$")
+            content += get_name_of_product(content_one=content_one, code=item[0]) + "\n"
+            content += f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el trimestre" + " => "
+            content += str(max_sales)+" ventas\n"
+            content += f"El total de ingresos que dejo este producto fue {max_sales * price:.2f}$\n"
             break
+    return content
 
         # price = item[2]
         # total: int = get_total(item[1])
@@ -133,7 +153,8 @@ def get_product_most_sold(content_two: str, content_one: str) -> None:
         # print(str(total)+" ventas")
         # print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
 
-def sales_of_the_month_for_product(content_two: str, content_one: str) -> None:
+def sales_of_the_month_for_product(content_two: str, content_one: str) -> str:
+    content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
 
     prices = []
@@ -177,36 +198,51 @@ def sales_of_the_month_for_product(content_two: str, content_one: str) -> None:
                         item[1].append(int(data[v].replace("\n", "")))
                         item.append(prices[v])
 
-    print("Ventas del mes de Octubre por producto:")
+    # print("Ventas del mes de Octubre por producto:")
+    content += "Ventas del mes de Octubre por producto:\n"
     for item in month_one:
         price = item[2]
         total: int = get_total(item[1])
-        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de octubre", end=" => ")
-        print(str(total)+" ventas")
-        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        # print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de octubre", end=" => ")
+        # print(str(total)+" ventas")
+        # print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        content += f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de octubre" + " => "
+        content += str(total)+" ventas\n"
+        content += f"El total de ingresos que dejo este producto fue {total * price:.2f}$\n"
 
-    print("-------------------------------")
-    print("Ventas del mes de Noviembre por producto:")
+    # print("-------------------------------")
+    # print("Ventas del mes de Noviembre por producto:")
+    content += "-------------------------------\n"
+    content += "Ventas del mes de Noviembre por producto:\n"
     for item in month_two:
         price = item[2]
         total: int = get_total(item[1])
-        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de noviembre", end=" => ")
-        print(str(total)+" ventas")
-        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        # print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de noviembre", end=" => ")
+        # print(str(total)+" ventas")
+        # print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        content += f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de noviembre" + " => "
+        content += str(total)+" ventas\n"
+        content += f"El total de ingresos que dejo este producto fue {total * price:.2f}$\n"
     
-    print("-------------------------------")
-    print("Ventas del mes de Diciembre por producto:")
+    # print("-------------------------------")
+    # print("Ventas del mes de Diciembre por producto:")
+    content += "-------------------------------\n"
+    content += "Ventas del mes de Diciembre por producto:\n"
     for item in month_three:
         price = item[2]
         total: int = get_total(item[1])
-        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de diciembre", end=" => ")
-        print(str(total)+" ventas")
-        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
-        
+        # print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de diciembre", end=" => ")
+        # print(str(total)+" ventas")
+        # print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        content += f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de diciembre" + " => "
+        content += str(total)+" ventas\n"
+        content += f"El total de ingresos que dejo este producto fue {total * price:.2f}$\n"
+    
+    return content
 
 
-def sales_of_the_month(content_two: str, content_one: str) -> None:
-
+def sales_of_the_month(content_two: str, content_one: str) -> str:
+    content: str = ""
     prices = []
     for product in content_one:
         data = product.split(",")
@@ -247,16 +283,28 @@ def sales_of_the_month(content_two: str, content_one: str) -> None:
                 total_sales_third_month += int(data[v]) * prices[v]
             total_third_month += get_total(data)
 
-    print(f"El total de ventas del mes de Octubre es: {total_first_month} ventas")
-    print(f"El total de ingresos del mes de Octubre es: {total_sales_first_month:.2f}$")
+    # print(f"El total de ventas del mes de Octubre es: {total_first_month} ventas")
+    # print(f"El total de ingresos del mes de Octubre es: {total_sales_first_month:.2f}$")
 
-    print("-------------------------------")
-    print(f"El total de ventas del mes de Noviembre es: {total_second_month} ventas")
-    print(f"El total de ingresos del mes de Noviembre es: {total_sales_second_month:.2f}$")
-    print("-------------------------------")
-    print(f"El total de ventas del mes de Diciembre es: {total_third_month} ventas")
-    print(f"El total de ingresos del mes de Diciembre es: {total_sales_third_month:.2f}$")
-    print("-------------------------------")
+    # print("-------------------------------")
+    # print(f"El total de ventas del mes de Noviembre es: {total_second_month} ventas")
+    # print(f"El total de ingresos del mes de Noviembre es: {total_sales_second_month:.2f}$")
+    # print("-------------------------------")
+    # print(f"El total de ventas del mes de Diciembre es: {total_third_month} ventas")
+    # print(f"El total de ingresos del mes de Diciembre es: {total_sales_third_month:.2f}$")
+    # print("-------------------------------")
+    content += f"El total de ventas del mes de Octubre es: {total_first_month} ventas\n"
+    content += f"El total de ingresos del mes de Octubre es: {total_sales_first_month:.2f}$\n"
+    content += "-------------------------------\n"
+    content += f"El total de ventas del mes de Noviembre es: {total_second_month} ventas\n"
+    content += f"El total de ingresos del mes de Noviembre es: {total_sales_second_month:.2f}$\n"
+    content += "-------------------------------\n"
+    content += f"El total de ventas del mes de Diciembre es: {total_third_month} ventas\n"
+    content += f"El total de ingresos del mes de Diciembre es: {total_sales_third_month:.2f}$\n"
+    content += "-------------------------------\n"
+
+    return content
+
 
 def get_price_of_product(content_one: list[str],code: str) -> int:
     for line  in content_one:
@@ -264,13 +312,16 @@ def get_price_of_product(content_one: list[str],code: str) -> int:
         if data[1] == code:
             return float(data[-1])
         
-def get_total_of_the_day(content_two: str) -> None:
+def get_total_of_the_day(content_two: str) -> str:
+    content: str = ""
     for d in content_two[1::]:
         day = d[1::].split(",")[0]
         data = d[1::].split(",")[1::]
         total: int = sum_of_the_day(data)
         
-        print(f"El total de ventas del dia {day} es {len(data)} y se obtuvo una ganacia de: {total}$")
+        # print(f"El total de ventas del dia {day} es {len(data)} y se obtuvo una ganacia de: {total}$")
+        content += f"El total de ventas del dia {day} es {len(data)} y se obtuvo una ganacia de: {total}$\n"
+    return content
 
 def sum_of_the_day(sales: list[str]) -> int:
     total: int = 0
@@ -316,7 +367,8 @@ def total_of_sales(content_two: str, content_one: str) -> list[int]:
 
     return [total_ventas, total_usd]
 
-def get_total_of_all_products(content_two: str, content_one: str) -> None:
+def get_total_of_all_products(content_two: str, content_one: str) -> str:
+    content: str = ""
     columns: list[int] = []
 
     for item in content_two[0].split(",")[1::]:
@@ -340,10 +392,15 @@ def get_total_of_all_products(content_two: str, content_one: str) -> None:
     for item in codes:
         price: int = get_price_of_product(content_one=content_one, code=item[0])
         ventas: int = get_total(item[1])
-        print("El total de ventas del codigo "+item[0], end=" => ")
-        print(str(ventas)+" ventas")
-        print(f"El total de ingresos del producto es {ventas*price:.2f}$")
-        print("-------------------------------")
+        # print("El total de ventas del codigo "+item[0], end=" => ")
+        # print(str(ventas)+" ventas")
+        # print(f"El total de ingresos del producto es {ventas*price:.2f}$")
+        # print("-------------------------------")
+        content += f"El total de ventas del codigo {item[0]} es {ventas} ventas\n"
+        content += f"El total de ingresos del producto es {ventas*price:.2f}$\n"
+        content += "-------------------------------\n"
+
+    return content
 
 
 def read_file(file_path_price: str, file_path_sales: str) -> str:
@@ -355,24 +412,52 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
         content_two = file_sales.readlines()
 
     ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
-    print(f"El total de ventas del trimestre es: {ventas} ventas")
-    print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
-    print("-"*50)
-    print("El total de ventas por producto es el siguiente: ")
-    get_total_of_all_products(content_two=content_two, content_one=content_one)  
-    print("-"*50)
-    get_total_of_the_day(content_two=content_two)
-    print("-"*50)
-    sales_of_the_month(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    """En proceso"""
-    print("-"*50)
-    get_product_most_sold(content_two=content_two, content_one=content_one)
-    print("-"*50)
-    get_product_less_sold(content_two=content_two, content_one=content_one)
-    histogram(content_one=content_one, content_two=content_two)
+    total_all_products: str = get_total_of_all_products(content_two=content_two, content_one=content_one)
+    total_day: str = get_total_of_the_day(content_two=content_two)
+    sales_month: str = sales_of_the_month(content_two=content_two, content_one=content_one)
+    sales_month_product: str = sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
+    product_most_sold: str = get_product_most_sold(content_two=content_two, content_one=content_one)
+    product_less_sold: str = get_product_less_sold(content_two=content_two, content_one=content_one)
+    histogram_content: str = histogram(content_one=content_one, content_two=content_two)
+
+    with open("reporte_de_ventas.txt", "a", encoding="utf-8") as report_file:
+        report_file.write(f"El total de ventas del trimestre es: {ventas} ventas\n")
+        report_file.write(f"El total de ingresos del trimestre es: {total_usd:.2f}$\n")
+        report_file.write("-"*50 + "\n")
+        report_file.write("El total de ventas por producto es el siguiente: \n")    
+        report_file.write("-"*50 + "\n")
+        report_file.write(total_all_products)
+        report_file.write("-"*50 + "\n")
+        report_file.write(total_day)
+        report_file.write("-"*50 + "\n")
+        report_file.write(sales_month)
+        report_file.write("-"*50 + "\n")
+        report_file.write(sales_month_product)
+        report_file.write("-"*50 + "\n")
+        report_file.write(product_most_sold)
+        report_file.write("-"*50 + "\n")
+        report_file.write(product_less_sold)
+        report_file.write("-"*50 + "\n")
+        report_file.write(histogram_content)
+        report_file.write("-"*50 + "\n")
+    # print(f"El total de ventas del trimestre es: {ventas} ventas")
+    # print(f"El total de ingresos del trimestre es: {total_usd:.2f}$")
+    # print("-"*50)
+    # print("El total de ventas por producto es el siguiente: ")
+    # get_total_of_all_products(content_two=content_two, content_one=content_one)  
+    # print("-"*50)
+    # get_total_of_the_day(content_two=content_two)
+    # print("-"*50)
+    # sales_of_the_month(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # """En proceso"""
+    # print("-"*50)
+    # get_product_most_sold(content_two=content_two, content_one=content_one)
+    # print("-"*50)
+    # get_product_less_sold(content_two=content_two, content_one=content_one)
+    # histogram(content_one=content_one, content_two=content_two)
     
 
 def menu():
@@ -397,6 +482,7 @@ def main():
                 file_sales: str = input("Ingrese la ruta del archivo de ventas: ")
                 print("")
                 read_file(file_path_price=file_price, file_path_sales=file_sales)
+                print("Reporte generado exitosamente en reporte_de_ventas.txt")
                 input("Presione Enter para continuar...")
             
             case "0":
