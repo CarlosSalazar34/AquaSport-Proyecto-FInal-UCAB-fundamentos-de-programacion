@@ -7,7 +7,6 @@ def get_price_of_product(content_one: list[str],code: str) -> int:
             return float(data[-1])
         
 def get_total_of_the_day(content_two: str) -> None:
-    # print(content_two)
     for d in content_two[1::]:
         day = d[1::].split(",")[0]
         data = d[1::].split(",")[1::]
@@ -49,8 +48,6 @@ def total_of_sales(content_two: str, content_one: str) -> list[int]:
             codes.append([code, []])
 
         for i in range(0, len(columns)):
-            # print(f"indice {i}")
-            # print(content_two)
             for j in range(1, len(content_two)):
                 data = content_two[j].split(",")[1::]
                 for v in range(0, len(data)):
@@ -64,7 +61,6 @@ def total_of_sales(content_two: str, content_one: str) -> list[int]:
             price: int = get_price_of_product(content_one=content_one, code=item[0])
             ventas: int = get_total(item[1])
             total_usd += ventas * price
-    # return total
     return [total_ventas, total_usd]
 
 def get_total_of_all_products(content_two: str, content_one: str) -> None:
@@ -97,14 +93,9 @@ def get_total_of_all_products(content_two: str, content_one: str) -> None:
         print(str(ventas)+" ventas")
         print(f"El total de ingresos del producto es {ventas*price:.2f}$")
         print("-------------------------------")
-        # print(f"Total de ingresos: {}")
-    # return codes
 
-
-    
 
 def read_file(file_path_price: str, file_path_sales: str) -> str:
-    # os.system("cls")
     with open(file_path_price, "r", encoding="utf-8") as file_price:
         content_one = file_price.readlines()
 
@@ -124,7 +115,6 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     get_total_of_the_day(content_two=content_two)
 
     
-    # return content_two[0:2]
 
 def menu():
     print()
