@@ -1,5 +1,77 @@
 import os
 
+def sales_of_the_month_for_product(content_two: str, content_one: str) -> None:
+    columns: list[str] = content_two[0].split(",")[1::]
+
+    prices = []
+
+    for product in content_one:
+        data = product.split(",")
+        prices.append(float(data[-1]))
+
+    month_one: list[list[str, list[int]]] = []
+    month_two: list[list[str, list[int]]] = []
+    month_three: list[list[str, list[int]]] = []
+
+    for c in columns:
+        month_one.append([c, []])
+        month_two.append([c, []])
+        month_three.append([c, []])
+
+    for i in range(1, len(content_two)):
+        # print(content_two[i])
+        if content_two[i].split(",")[0].split("/")[1] == "10":
+            data = content_two[i].split(",")[1::]
+            for v in range(0, len(data)):
+                for item in month_one:
+                    if item[0] == columns[v]:
+                        item[1].append(int(data[v].replace("\n", "")))
+                        item.append(prices[v])
+
+        if content_two[i].split(",")[0].split("/")[1] == "11":
+            data = content_two[i].split(",")[1::]
+            for v in range(0, len(data)):
+                for item in month_two:
+                    if item[0] == columns[v]:
+                        item[1].append(int(data[v].replace("\n", "")))
+                        item.append(prices[v])
+        
+        if content_two[i].split(",")[0].split("/")[1] == "12":
+            data = content_two[i].split(",")[1::]
+            for v in range(0, len(data)):
+                for item in month_three:
+                    if item[0] == columns[v]:
+                        item[1].append(int(data[v].replace("\n", "")))
+                        item.append(prices[v])
+
+    print("Ventas del mes de Octubre por producto:")
+    for item in month_one:
+        price = item[2]
+        total: int = get_total(item[1])
+        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de octubre", end=" => ")
+        print(str(total)+" ventas")
+        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+
+    print("-------------------------------")
+    print("Ventas del mes de Noviembre por producto:")
+    for item in month_two:
+        price = item[2]
+        total: int = get_total(item[1])
+        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de noviembre", end=" => ")
+        print(str(total)+" ventas")
+        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+    
+    print("-------------------------------")
+    print("Ventas del mes de Diciembre por producto:")
+    for item in month_three:
+        price = item[2]
+        total: int = get_total(item[1])
+        print(f"El total de ventas del codigo "+item[0].replace("\n", "")+" en el mes de diciembre", end=" => ")
+        print(str(total)+" ventas")
+        print(f"El total de ingresos que dejo este producto fue {total * price:.2f}$")
+        
+
+
 def sales_of_the_month(content_two: str) -> None:
     total_sales_first_month: int = 0
     total_sales_second_month: int = 0
@@ -110,8 +182,6 @@ def get_total_of_all_products(content_two: str, content_one: str) -> None:
         codes.append([code, []])
 
     for i in range(0, len(columns)):
-        # print(f"indice {i}")
-        # print(content_two)
         for j in range(1, len(content_two)):
             data = content_two[j].split(",")[1::]
             for v in range(0, len(data)):
@@ -148,6 +218,7 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     """En proceso"""
     get_total_of_the_day(content_two=content_two)
     sales_of_the_month(content_two=content_two)
+    sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
 
     
 
