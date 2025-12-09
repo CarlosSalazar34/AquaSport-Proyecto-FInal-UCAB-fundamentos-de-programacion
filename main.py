@@ -396,7 +396,7 @@ def menu():
     print("Presione 0 para salir.")
     print()
 
-def main():
+def main()->None:
     while True:
         os.system("cls")            
         menu()
