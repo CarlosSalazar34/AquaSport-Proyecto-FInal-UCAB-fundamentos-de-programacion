@@ -405,6 +405,12 @@ def main():
         match choice: 
             case "1":
                 os.system("cls")
+                print("ARCHIVOS DISPONIBLES".center(50, "*"))
+                for i in os.listdir():
+                    if "txt" in i:
+                        print(i)
+                    else:
+                        continue
                 file_price: str = input("Ingrese la ruta del archivo de precios: ")
                 file_sales: str = input("Ingrese la ruta del archivo de ventas: ")
                 print("")
