@@ -3,6 +3,7 @@ import os
 def histogram(content_one: str, content_two: str) -> str:
     content: str = ""
     total = total_of_sales(content_two=content_two, content_one=content_one)[0]
+    print("hola")
     histogram_values: list[list[str, int]] = []
     content += "Representación gráfica de las ventas por producto:\n"
     columns: list[int] = []
@@ -30,7 +31,7 @@ def histogram(content_one: str, content_two: str) -> str:
         histogram_values.append([item[0], ventas])
 
     content += f'{"*"*50}\n'
-    content += "Representación gráfica de las ventas por producto:\n"
+    # content += "Representación gráfica de las ventas por producto:\n"
     for item in histogram_values:
         content += "#"*int((item[1]*100)/total) + f" {get_name_of_product(content_one, item[0])} ({(item[1]*100)/total:.2f}%)\n"
     content += f'{"*"*50}\n'
@@ -170,6 +171,8 @@ def sales_of_the_month_for_product(content_two: str, content_one: str) -> str:
                     if item[0] == columns[v]:
                         item[1].append(int(data[v].replace("\n", "")))
                         item.append(prices[v])
+
+    # print(month_one)
 
     content += "Ventas del mes de Octubre por producto:\n"
     for item in month_one:
@@ -316,35 +319,48 @@ def total_of_sales(content_two: str, content_one: str) -> list[int]:
     return [total_ventas, total_usd]
 
 def get_total_of_all_products(content_two: str, content_one: str) -> str:
-    content: str = ""
+    # content: str = ""
     columns: list[int] = []
+    # print(content_two)
 
     for item in content_two[0].split(",")[1::]:
+        # ACCEDO AL VALOR DE LA LISTA 
+        # 'fecha,AB-01,RX-12,HO-25,HQ-22,GR-12,PR-14,AF-56,ST-10,AT-24,HF-02\n'
         columns.append(item.replace("\n", ""))
 
     codes: list[list[str, list[str]]] = []
     
     for code in columns:
         codes.append([code, []])
+    
+    # print(codes)
 
     for i in range(0, len(columns)):
+        # print(columns[i])
         for j in range(1, len(content_two)):
             data = content_two[j].split(",")[1::]
+            # print(data)
             for v in range(0, len(data)):
                 if v == i:
                     for item in codes:
-                        # print(item)
                         if item[0] == columns[i]:
                             item[1].append(int(data[v].replace("\n", "")))
+
+    # print(codes)
+    # print(len(codes[1][1]))
+    # print(len(content_two[1::]))
 
     for item in codes:
         price: int = get_price_of_product(content_one=content_one, code=item[0])
         ventas: int = get_total(item[1])
-        content += f"El total de ventas del codigo {item[0]} es {ventas} ventas\n"
-        content += f"El total de ingresos del producto es {ventas*price:.2f}$\n"
-        content += "-------------------------------\n"
+    
+        # print(f"El total de ventas del codigo {item[0]} es {ventas} ventas\n")
+        # print(f"El total de ingresos del producto es {ventas*price:.2f}$\n")
+    #     content += f"El total de ventas del codigo {item[0]} es {ventas} ventas\n"
+    #     content += f"El total de ingresos del producto es {ventas*price:.2f}$\n"
+    #     content += "-------------------------------\n"
 
-    return content
+    # return content
 
 
 def read_file(file_path_price: str, file_path_sales: str) -> str:
@@ -355,37 +371,9 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
     with open(file_path_sales, "r", encoding="utf-8") as file_sales:
         content_two = file_sales.readlines()
 
-    ventas, total_usd = total_of_sales(content_two=content_two, content_one=content_one)
-    total_all_products: str = get_total_of_all_products(content_two=content_two, content_one=content_one)
-    total_day: str = get_total_of_the_day(content_two=content_two)
-    sales_month: str = sales_of_the_month(content_two=content_two, content_one=content_one)
-    sales_month_product: str = sales_of_the_month_for_product(content_two=content_two, content_one=content_one)
-    product_most_sold: str = get_product_most_sold(content_two=content_two, content_one=content_one)
-    product_less_sold: str = get_product_less_sold(content_two=content_two, content_one=content_one)
-    histogram_content: str = histogram(content_one=content_one, content_two=content_two)
-
-    with open("reporte_de_ventas.txt", "a", encoding="utf-8") as report_file:
-        report_file.write(f"El total de ventas del trimestre es: {ventas} ventas\n")
-        report_file.write(f"El total de ingresos del trimestre es: {total_usd:.2f}$\n")
-        report_file.write("-"*50 + "\n")
-        report_file.write("El total de ventas por producto es el siguiente: \n")    
-        report_file.write("-"*50 + "\n")
-        report_file.write(total_all_products)
-        report_file.write("-"*50 + "\n")
-        report_file.write(total_day)
-        report_file.write("-"*50 + "\n")
-        report_file.write(sales_month)
-        report_file.write("-"*50 + "\n")
-        report_file.write(sales_month_product)
-        report_file.write("-"*50 + "\n")
-        report_file.write(product_most_sold)
-        report_file.write("-"*50 + "\n")
-        report_file.write(product_less_sold)
-        report_file.write("-"*50 + "\n")
-        report_file.write(histogram_content)
-        report_file.write("-"*50 + "\n")
-
-    
+    # get_total_of_all_products(content_two=content_two, content_one=content_one)
+    histograma = histogram(content_one=content_one, content_two=content_two)
+    print(histograma)
 
 def menu():
     print()
@@ -411,9 +399,10 @@ def main()->None:
                         print(i)
                     else:
                         continue
-                file_price: str = input("Ingrese la ruta del archivo de precios: ")
-                file_sales: str = input("Ingrese la ruta del archivo de ventas: ")
-                print("")
+                # file_price: str = input("Ingrese la ruta del archivo de precios: ")
+                # file_sales: str = input("Ingrese la ruta del archivo de ventas: ")
+                file_price: str = "precios_natacion.txt"
+                file_sales: str = "ventas_natacion.txt"
                 read_file(file_path_price=file_price, file_path_sales=file_sales)
                 print("Reporte generado exitosamente en reporte_de_ventas.txt")
                 input("Presione Enter para continuar...")
