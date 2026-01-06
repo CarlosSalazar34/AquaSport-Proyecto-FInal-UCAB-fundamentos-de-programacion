@@ -1,5 +1,6 @@
 import os
 
+# Crea un histograma visible en el archivo .txt de respuesta
 def histogram(content_one: str, content_two: str) -> str:
     content: str = ""
     total = total_of_sales(content_two=content_two, content_one=content_one)[0]
@@ -36,6 +37,7 @@ def histogram(content_one: str, content_two: str) -> str:
     content += f'{"*"*50}\n'
     return content
 
+# Obtiene el valor maximo de la lista de ventas totales
 def get_max(sales: list[int]) -> int:
     max_value: int = sales[0]
     for item in sales:
@@ -43,6 +45,8 @@ def get_max(sales: list[int]) -> int:
             max_value = item
     return max_value
 
+
+# Obtiene el nombre del producto
 def get_name_of_product(content_one: str, code: str) -> str:
     for line in content_one:
         data = line.split(",")
@@ -50,7 +54,7 @@ def get_name_of_product(content_one: str, code: str) -> str:
             return data[0]
     return ""
 
-
+# Obtiene el producto menos vendido
 def get_product_less_sold(content_two: str, content_one: str) -> str:
     content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
@@ -91,6 +95,7 @@ def get_product_less_sold(content_two: str, content_one: str) -> str:
             break
     return content
 
+# Obtiene el producto más vendido
 def get_product_most_sold(content_two: str, content_one: str) -> str:
     content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
@@ -127,6 +132,7 @@ def get_product_most_sold(content_two: str, content_one: str) -> str:
             break
     return content
 
+# Obtiene las ventas totales de cada mes por producto
 def sales_of_the_month_for_product(content_two: str, content_one: str) -> str:
     content: str = ""
     columns: list[str] = content_two[0].split(",")[1::]
@@ -199,7 +205,7 @@ def sales_of_the_month_for_product(content_two: str, content_one: str) -> str:
     
     return content
 
-
+# Obtiene las ventas totales de cada mes
 def sales_of_the_month(content_two: str, content_one: str) -> str:
     content: str = ""
     prices = []
@@ -254,36 +260,39 @@ def sales_of_the_month(content_two: str, content_one: str) -> str:
 
     return content
 
-
+# Obtiene el precio del producto
 def get_price_of_product(content_one: list[str],code: str) -> int:
     for line  in content_one:
         data = line.split(",")
         if data[1] == code:
             return float(data[-1])
-        
+
+# Obtiene el total de ventas del dia y la ganancia
 def get_total_of_the_day(content_two: str) -> str:
     content: str = ""
     for d in content_two[1::]:
         day = d[1::].split(",")[0]
         data = d[1::].split(",")[1::]
-        total: int = sum_of_the_day(data)
+        # total: int = sum_of_the_day(data)
+        total: int = get_total(data)
         
         content += f"El total de ventas del dia {day} es {len(data)} y se obtuvo una ganacia de: {total}$\n"
     return content
 
-def sum_of_the_day(sales: list[str]) -> int:
-    total: int = 0
-    for item in sales:
-        total += int(item)
-    return total
+# def sum_of_the_day(sales: list[str]) -> int:
+#     total: int = 0
+#     for item in sales:
+#         total += int(item)
+#     return total
 
+# Devuelve el total de ventas por dia
 def get_total(list: list) -> int:
     total: int = 0
     for item in list:
         total += int(item)
     return total
 
-
+# Devuelve el total de ventas y las ganancias el usd
 def total_of_sales(content_two: str, content_one: str) -> list[int]:
     total_ventas = 0
     total_usd = 0
@@ -315,6 +324,8 @@ def total_of_sales(content_two: str, content_one: str) -> list[int]:
 
     return [total_ventas, total_usd]
 
+
+# Devuelve el total de ventas de cada codigo y los ingresos que recaudo
 def get_total_of_all_products(content_two: str, content_one: str) -> str:
     content: str = ""
     columns: list[int] = []
@@ -347,6 +358,7 @@ def get_total_of_all_products(content_two: str, content_one: str) -> str:
     return content
 
 
+# Crea el archivo con toda la data 
 def read_file(file_path_price: str, file_path_sales: str) -> str:
     with open(file_path_price, "r", encoding="utf-8") as file_price:
         content_one = file_price.readlines()
@@ -386,7 +398,7 @@ def read_file(file_path_price: str, file_path_sales: str) -> str:
         report_file.write("-"*50 + "\n")
 
     
-
+# Imprime el menu
 def menu():
     print()
     print("BIENVENIDO AL SISTEMA DE REPORTES DE VENTAS".center(50, "-"))
@@ -396,6 +408,8 @@ def menu():
     print("Presione 0 para salir.")
     print()
 
+
+# Funcion main para la corrida del codigo
 def main()->None:
     while True:
         os.system("cls")            
