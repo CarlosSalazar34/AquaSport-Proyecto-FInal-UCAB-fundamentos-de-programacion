@@ -3,7 +3,8 @@ import os
 # Crea un histograma visible en el archivo .txt de respuesta
 def histogram(content_one: str, content_two: str) -> str:
     content: str = ""
-    total = total_of_sales(content_two=content_two, content_one=content_one)[0]
+    #Esta funcion 'total_of_sales' devuelve una lista y accedemos al primer indice que es el total de ventas
+    total = total_of_sales(content_two=content_two, content_one=content_one)[0] 
     histogram_values: list[list[str, int]] = []
     content += "Representación gráfica de las ventas por producto:\n"
     columns: list[int] = []
